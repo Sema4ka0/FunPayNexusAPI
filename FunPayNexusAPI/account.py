@@ -11,10 +11,12 @@ import time
 class Client:
     """Данный класс делает подключение к аккаунту FunPay"""
 
-    def __init__(self,golden_key: str,user_agent="",requests_timeout=10) -> None:
+    def __init__(self, golden_key: str, user_agent: str, requests_timeout=10) -> None:
 
         self._headers = {
-            "cookie": "golden_key=" + golden_key
+            "cookie": f"golden_key={golden_key}",
+            "PHPSESSID": 'PHPSESSID=IdeG2Q8stEqaaw3rH2eM-qXNdKXs1cEe',
+            "User-Agent": f"User-Agent={user_agent}"
         }
 
         response = requests.get("https://funpay.com/",headers=self._headers)
@@ -27,6 +29,10 @@ class Client:
                self.phpsessid = response.cookies.get_dict()['PHPSESSID']
                self.user_agent = user_agent
                self.requests_timeout = requests_timeout
+
+               self._headers = {
+                    "cookie": f"golden_key={golden_key}" + f";PHPSESSID={self.phpsessid}"
+               }
             else:
                 raise ValueError("Invalid token, double-check its correctness")      
         else:
@@ -40,7 +46,3 @@ class Client:
               else:
                   response = await client.post(api_method,data=payload,headers=headers)
                   return [response.status]
-
-    
-
-        

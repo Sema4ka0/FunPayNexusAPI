@@ -7,10 +7,9 @@ from .account import Client
 import aiohttp
 import re
 
-
 class ObjectAccount(Client):
     """ObjectAccount - позволяет получить актуальную информацию о вашем аккаунте"""
-    def __init__(self,client) -> None:
+    def __init__(self, client) -> None:
         self._golden_key = client._golden_key
         self._headers = client._headers
 
@@ -21,7 +20,7 @@ class ObjectAccount(Client):
                 response = await client.get(api_method,headers=headers,data=payload)
                 return [await response.text(),response.status]
             else:
-                response = await client.post(api_method,data=payload,headers=headers)
+                response = await client.post(api_method,headers=headers,data=payload)
                 return [response.status]
     
     @property
@@ -63,17 +62,17 @@ class ObjectAccount(Client):
            return info_crsf_token['csrf-token']
         
     @property
-    async def balans(self) -> list | None:
+    async def balance(self) -> list | None:
         """Вовзращает список с балансом на аккаунте\nФормат: [0.0, 0.0, 0.0], [рубли, доллары, евро]"""
         response = await self.__api_requests("get","https://funpay.com/account/balance",headers=self._headers)
         if response[1] == 200:
            parser = BeautifulSoup(response[0],"html.parser")
-           info_balanse = parser.find_all("span",class_="balances-value")
-           if info_balanse != []:
-               list_balanse = []
-               for event in info_balanse:
-                   list_balanse.append(float(event.text.split(" ")[0])) 
-               return list_balanse
+           info_balance = parser.find_all("span",class_="balances-value")
+           if info_balance != []:
+               list_balance = []
+               for event in info_balance:
+                   list_balance.append(float(event.text.split(" ")[0])) 
+               return list_balance
            else:
                return []
         
@@ -147,4 +146,47 @@ class ObjectAccount(Client):
             else:
                 return []
             
-    
+    @property
+    async def get_new_messages(self) -> list:
+        """
+        Выводит список непрочитанных чатов
+        Формат:
+
+        [{'data-node-msg': '2362438457', 'data-id': '176409301', 'username': 'Sema4ka0', 'message': 'Привет', 'time': '00:41'}, 
+        {'data-node-msg': '2463802041', 'data-id': '156709301', 'username': 'Dirstd', 'message': 'Фотография', 'time': 'вчера'}, 
+        {'data-node-msg': '2354308267', 'data-id': '115399301', 'username': 'Defiro4ka', 'message': 'Тут?', 'time': '05.07'}]
+
+        time может быть равен 'вчера' или дате, если сообщения старые
+        message может быть равен 'Фотография', всегда равен последнему сообщению в чате
+        """
+
+        response = await self.__api_requests("get","https://funpay.com/chat/",headers=self._headers)
+        if response[1] == 200:
+            bs = BeautifulSoup(response[0],"html.parser")
+            unred_chats = bs.find_all("a","contact-item unread")
+            if unred_chats != []:
+                new_message = []
+                for count, event in enumerate(unred_chats):
+                    new_message.append(
+                        {"data-node-msg": event['data-node-msg'],
+                         "data-id": event['data-id'],
+                         "username": event.find("div", class_="media-user-name").text,
+                         "message": event.find("div", class_="contact-item-message").text,
+                         "time": event.find("div", class_="contact-item-time").text
+                         }
+                    )
+                return new_message
+
+            else:
+                return []
+            
+    async def send_message(self, user_id, mess):
+        csrf_token = await self.csrf_token
+        my_id = await self.user_id
+
+        data = {
+            'request': '{"action":"chat_message","data":{"node":"users-'+str(my_id)+'-'+str(user_id)+'", "content":"'+str(mess)+'"}}',
+            'csrf_token': csrf_token,
+        }
+
+        response = await self.__api_requests("post", "https://funpay.com/runner/", headers=self._headers, payload=data)
