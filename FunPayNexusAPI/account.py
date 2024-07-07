@@ -15,7 +15,6 @@ class Client:
 
         self._headers = {
             "cookie": f"golden_key={golden_key}",
-            "PHPSESSID": 'PHPSESSID=IdeG2Q8stEqaaw3rH2eM-qXNdKXs1cEe',
             "User-Agent": f"User-Agent={user_agent}"
         }
 
