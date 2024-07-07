@@ -27,8 +27,12 @@ from FunPayNexusAPI.account import Client
 from FunPayNexusAPI.methods import ObjectAccount
 import asyncio
 
+# Вводим golden_key и user_agent
+golden_key = "golden_key аккаунта"
+user_agent = "ваш user_agent" 
+
 # инициализируем аккаунт
-client = Client(golden_key="ТУТ golden_key")
+client = Client(golden_key=golden_key, user_agent=user_agent)
 account = ObjectAccount(client)
 
 async def info_handler() -> None:
