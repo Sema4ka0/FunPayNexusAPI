@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name='FunPayNexusAPI',
-    version='0.0.1',
+    version='0.0.2',
     author='Sema4ka0',
     author_email='seem.git@gmail.com',
     description='This is the API for funpay.com',
@@ -18,7 +18,12 @@ setup(
     packages=find_packages(),
     install_requires=['requests_toolbelt', 'requests', 'beautifulsoup4', 'aiohttp'],
     classifiers=[
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent'
     ],
@@ -27,5 +32,5 @@ setup(
         'GitHub': 'https://github.com/Sema4ka0/FunPay-API',
         'Chanel': 'https://t.me/FunPayNexus'
     },
-    python_requires='>=3.11'
+    python_requires='>=3.8'
 )
