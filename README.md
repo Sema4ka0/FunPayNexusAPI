@@ -39,8 +39,8 @@ async def info_handler() -> None:
     username = await account.username
     user_id = await account.user_id
     url_account = await account.url
-    balanse = await account.balans
-    print(f"username: {username}\nID: {user_id}\nurl: {url_account}\nbalans: {balanse[0]}₽ {balanse[1]}$ {balanse[2]}€")
+    balance = await account.balance
+    print(f"username: {username}\nID: {user_id}\nurl: {url_account}\nbalance: {balance[0]}₽ {balance[1]}$ {balance[2]}€")
     
 async def main() -> None:
     await info_handler()
