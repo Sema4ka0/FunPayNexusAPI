@@ -16,6 +16,10 @@
 ```bash
 pip install FunPayNexusAPI
 ```
+Обновление библиотеки:
+```bash
+pip install --upgrade FunPayNexusAPI
+```
 ## Пример использования
 
 ### Получение информации о профиле
@@ -23,93 +27,45 @@ pip install FunPayNexusAPI
 Ниже приведены несколько примеров с использованием FunPayNexusAPI
 
 ```python
-from FunPayNexusAPI.account import Client
-from FunPayNexusAPI.methods import ObjectAccount
+from FunPayNexusAPI import Bot, Dispatcher
 import asyncio
 
-# Вводим golden_key и user_agent
-golden_key = "golden_key аккаунта"
-user_agent = "ваш user_agent" 
+bot = Bot(golden_key="GOLDEN_KEY") # заменяем "GOLDEN_KEY"
+dispatcher = Dispatcher(bot)
 
-# инициализируем аккаунт
-client = Client(golden_key=golden_key, user_agent=user_agent)
-account = ObjectAccount(client)
-
-async def info_handler() -> None:
-    username = await account.username
-    user_id = await account.user_id
-    url_account = await account.url
-    balance = await account.balance
-    print(f"username: {username}\nID: {user_id}\nurl: {url_account}\nbalance: {balance[0]}₽ {balance[1]}$ {balance[2]}€")
+async def info_account_handler() -> None:
+    account = dispatcher.account
+    message = (
+        f"username: {await account.username}\n"
+        f"user_id: {await account.id}\n"
+        f"balans: {await account.balance}\n"
+        f"new_message: {len(await account.get_new_messages)}\n"
+    )
+    print(message)
     
-async def main() -> None:
-    await info_handler()
-
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(info_account_handler())
 ```
-
-### Получение непрочитанных чатов на аккунте
-
-```python
-from FunPayNexusAPI.account import Client
-from FunPayNexusAPI.methods import ObjectAccount
-import asyncio
-
-# Вводим golden_key и user_agent
-golden_key = "golden_key аккаунта"
-user_agent = "ваш user_agent" 
-
-# инициализируем аккаунт
-client = Client(golden_key=golden_key, user_agent=user_agent)
-account = ObjectAccount(client)
-
-async def func():
-    a = await account.get_new_messages
-    print(a)
-
-async def main():
-    await func()
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
+Заменяем "GOLDEN_KEY" на golden_key вашего аккаунта.
 ### Отправление сообщения в чат
 
 ```python
-from FunPayNexusAPI.account import Client
-from FunPayNexusAPI.methods import ObjectAccount
+from FunPayNexusAPI import Bot, Dispatcher
 import asyncio
 
-# Вводим golden_key и user_agent
-golden_key = "golden_key аккаунта"
-user_agent = "ваш user_agent" 
+bot = Bot(golden_key="GOLDEN_KEY") # заменяем "GOLDEN_KEY"
+dispatcher = Dispatcher(bot)
 
-# инициализируем аккаунт
-client = Client(golden_key=golden_key, user_agent=user_agent)
-account = ObjectAccount(client)
-
-user_id = 'айди аккаунта собеседника'
-mess = 'текст сообщения'
-
-async def func():
-    await account.send_message(user_id, mess)
-
-async def main():
-    await func()
-
+async def info_account_handler() -> None:
+    await dispatcher.send_message("USER_ID", "Привет!") # заменяем "USER_ID"
+    
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(info_account_handler())
 ```
-## Описание классов и методов
-
-### account.py
-
-Этот модуль содержит класс `Client`, который используется для подключения к аккаунту FunPay.
-
-### methods.py
-
-Этот модуль содержит класс `ObjectAccount`, который предоставляет методы для взаимодействия с аккаунтом.
+Заменяем "GOLDEN_KEY" на golden_key вашего аккаунта.  
+Заменяем "USER_ID" на id собеседника.
 
 ## Заключение
 Проект находится в самом начале своего развития, и активно разрабатывается, вскоре будет добавлен новый функционал, по надобности обновлен старый.
+
+На данный момент нет документации, поэтому по вопросам пишите в чат, указан выше.
