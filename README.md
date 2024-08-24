@@ -21,10 +21,9 @@ pip install FunPayNexusAPI
 pip install --upgrade FunPayNexusAPI
 ```
 ## Пример использования
-
+Ниже приведены несколько примеров с использованием FunPayNexusAPI
 ### Получение информации о профиле
 
-Ниже приведены несколько примеров с использованием FunPayNexusAPI
 
 ```python
 from FunPayNexusAPI import Bot, Dispatcher
@@ -33,7 +32,7 @@ import asyncio
 bot = Bot(golden_key="GOLDEN_KEY") # заменяем "GOLDEN_KEY"
 dispatcher = Dispatcher(bot)
 
-async def info_account_handler() -> None:
+async def main() -> None:
     account = dispatcher.account
     message = (
         f"username: {await account.username}\n"
@@ -44,7 +43,7 @@ async def info_account_handler() -> None:
     print(message)
     
 if __name__ == "__main__":
-    asyncio.run(info_account_handler())
+    asyncio.run(main())
 ```
 Заменяем "GOLDEN_KEY" на golden_key вашего аккаунта.
 ### Отправление сообщения в чат
@@ -56,11 +55,11 @@ import asyncio
 bot = Bot(golden_key="GOLDEN_KEY") # заменяем "GOLDEN_KEY"
 dispatcher = Dispatcher(bot)
 
-async def info_account_handler() -> None:
+async def main() -> None:
     await dispatcher.send_message("USER_ID", "Привет!") # заменяем "USER_ID"
     
 if __name__ == "__main__":
-    asyncio.run(info_account_handler())
+    asyncio.run(main())
 ```
 Заменяем "GOLDEN_KEY" на golden_key вашего аккаунта.  
 Заменяем "USER_ID" на id собеседника.
