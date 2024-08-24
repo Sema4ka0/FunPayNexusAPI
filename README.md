@@ -37,7 +37,7 @@ async def main() -> None:
     message = (
         f"username: {await account.username}\n"
         f"user_id: {await account.id}\n"
-        f"balans: {await account.balance}\n"
+        f"balance: {await account.balance}\n"
         f"new_message: {len(await account.get_new_messages)}\n"
     )
     print(message)
