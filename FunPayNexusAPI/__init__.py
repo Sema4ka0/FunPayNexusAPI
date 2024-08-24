@@ -1,2 +1,1 @@
-from .account import Client
-from .methods import ObjectAccount
+from .account.client import Bot, Dispatcher

@@ -1,19 +1,18 @@
 from setuptools import setup, find_packages
 
 
-def readme():
-  with open('README.md', 'r') as f:
-    return f.read()
+with open("README.md", "r", encoding="utf-8") as f:
+    long_desc = f.read()
 
 
 setup(
     name='FunPayNexusAPI',
-    version='0.0.2',
+    version='0.0.4',
     author='Sema4ka0',
     author_email='seem.git@gmail.com',
-    description='This is the API for funpay.com',
-    long_description=readme(),
-    long_description_content_type='text/markdown',
+    description='This is a convenient tool for developing and working with the site funpay.com',
+    long_description=long_desc,
+    long_description_content_type="text/markdown",
     url='https://github.com/Sema4ka0/FunPay-API',
     packages=find_packages(),
     install_requires=['requests_toolbelt', 'requests', 'beautifulsoup4', 'aiohttp'],
